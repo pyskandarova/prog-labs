@@ -1,82 +1,87 @@
 #include <iostream>
-#include <vector>
 
-class Vector {
+using namespace std;
+
+const int max_size=3; //Максимально возможный размер массива
+
+////////////////
+// МОЙ ВЕКТОР //
+////////////////
+class MyVector {
 private:
-    std::vector<int> elements;
-
+    int* elements; // Массив элементов
 public:
-    Vector(std::vector<int> values) : elements(values) {}
+    MyVector(int* values) : elements(values) {}
 
-    Vector operator+(const Vector& other) const {
-        std::vector<int> result;
-        for (size_t i = 0; i < elements.size(); i++) {
-            result.push_back(elements[i] + other.elements[i]);
+    MyVector operator+(const MyVector& other) const {
+        int* result {new int[max_size]};
+        for (int i = 0; i < max_size; i++) {
+            result[i] = elements[i] + other.elements[i];
         }
-        return Vector(result);
+        return MyVector(result);
     }
 
-    Vector operator-(const Vector& other) const {
-        std::vector<int> result;
-        for (size_t i = 0; i < elements.size(); i++) {
-            result.push_back(elements[i] - other.elements[i]);
+    MyVector operator-(const MyVector& other) const {
+        int* result {new int[max_size]};
+        for (int i = 0; i < max_size; i++) {
+            result[i] = elements[i] - other.elements[i];
         }
-        return Vector(result);
+        return MyVector(result);
     }
 
-    Vector operator*(int scalar) const {
-        std::vector<int> result;
-        for (size_t i = 0; i < elements.size(); i++) {
-            result.push_back(elements[i] * scalar);
+    MyVector operator*(int scalar) const {
+        int* result {new int[max_size]};
+        for (int i = 0; i < max_size; i++) {
+            result[i] = elements[i] * scalar;
         }
-        return Vector(result);
+        return MyVector(result);
     }
 
-    Vector operator/(int scalar) const {
-        std::vector<int> result;
-        for (size_t i = 0; i < elements.size(); i++) {
-            result.push_back(elements[i] / scalar);
+    MyVector operator/(int scalar) const {
+        int* result {new int[max_size]};
+        for (int i = 0; i < max_size; i++) {
+            result[i] = elements[i] / scalar;
         }
-        return Vector(result);
+        return MyVector(result);
     }
 
-    void print() const {
-        std::cout << "[ ";
-        for (const auto& element : elements) {
-            std::cout << element << " ";
+    void print(){
+        cout << "[ ";
+        for (int i = 0; i < max_size; i++) {
+            cout << elements[i] << " ";
         }
-        std::cout << "]" << std::endl;
+        cout << "]" << endl;
     }
 };
 
 int main() {
-    std::vector<int> values1 = {1, 2, 3};
-    std::vector<int> values2 = {4, 5, 6};
+    int *arr1 {new int[max_size]{ 1, 2, 3}};
+    int *arr2 {new int[max_size]{ 4, 5, 6}};
 
-    Vector v1(values1);
-    Vector v2(values2);
+    MyVector v1(arr1);
+    MyVector v2(arr2);
 
-    Vector sum = v1 + v2;
-    Vector difference = v1 - v2;
-    Vector scaled = v1 * 3;
-    Vector divided = v2 / 2;
+    MyVector sum = v1 + v2;
+    MyVector difference = v1 - v2;
+    MyVector scaled = v1 * 3;
+    MyVector divided = v2 / 2;
 
-    std::cout << "v1: ";
+    cout << "v1: ";
     v1.print();
 
-    std::cout << "v2: ";
+    cout << "v2: ";
     v2.print();
 
-    std::cout << "Sum: ";
+    cout << "Sum: ";
     sum.print();
 
-    std::cout << "Difference: ";
+    cout << "Difference: ";
     difference.print();
 
-    std::cout << "Scaled: ";
+    cout << "Scaled: ";
     scaled.print();
 
-    std::cout << "Divided: ";
+    cout << "Divided: ";
     divided.print();
 
     return 0;
