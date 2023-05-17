@@ -1,20 +1,22 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 class Matrix {
 private:
-    std::vector<std::vector<int>> data;
+    vector<vector<int>> data;
     int rows;
     int columns;
 
 public:
     Matrix(int rows, int columns) : rows(rows), columns(columns) {
-        data.resize(rows, std::vector<int>(columns, 0));
+        data.resize(rows, vector<int>(columns, 0));
     }
 
-    void setData(const std::vector<std::vector<int>>& input) {
+    void setData(const vector<vector<int>>& input) {
         if (input.size() != rows || input[0].size() != columns) {
-            std::cout << "Invalid input size for matrix\n";
+            cout << "Invalid input size for matrix\n";
             return;
         }
         data = input;
@@ -22,7 +24,7 @@ public:
 
     Matrix operator+(const Matrix& other) const {
         if (rows != other.rows || columns != other.columns) {
-            std::cout << "Matrix dimensions are not compatible for addition\n";
+            cout << "Matrix dimensions are not compatible for addition\n";
             return Matrix(0, 0);
         }
 
@@ -38,7 +40,7 @@ public:
 
     Matrix operator-(const Matrix& other) const {
         if (rows != other.rows || columns != other.columns) {
-            std::cout << "Matrix dimensions are not compatible for subtraction\n";
+            cout << "Matrix dimensions are not compatible for subtraction\n";
             return Matrix(0, 0);
         }
 
@@ -54,7 +56,7 @@ public:
 
     Matrix operator*(const Matrix& other) const {
         if (columns != other.rows) {
-            std::cout << "Matrix dimensions are not compatible for multiplication\n";
+            cout << "Matrix dimensions are not compatible for multiplication\n";
             return Matrix(0, 0);
         }
 
@@ -72,12 +74,12 @@ public:
 
     Matrix operator/(const Matrix& other) const {
         if (other.rows != other.columns || other.rows != 1) {
-            std::cout << "Matrix dimensions are not compatible for division\n";
+            cout << "Matrix dimensions are not compatible for division\n";
             return Matrix(0, 0);
         }
 
         if (other.data[0][0] == 0) {
-            std::cout << "Division by zero error\n";
+            cout << "Division by zero error\n";
             return Matrix(0, 0);
         }
 
@@ -94,9 +96,9 @@ public:
     void print() const {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                std::cout << data[i][j] << " ";
+                cout << data[i][j] << " ";
             }
-            std::cout << "\n";
+            cout << "\n";
         }
     }
 };
@@ -109,19 +111,19 @@ int main() {
     m2.setData({{5, 6}, {7, 8}});
 
     Matrix sum = m1 + m2;
-    std::cout << "Sum:\n";
+    cout << "Sum:\n";
     sum.print();
 
     Matrix diff = m1 - m2;
-    std::cout << "Difference:\n";
+    cout << "Difference:\n";
     diff.print();
 
     Matrix product = m1 * m2;
-    std::cout << "Product:\n";
+    cout << "Product:\n";
     product.print();
 
     Matrix quotient = m1 / m2;
-    std::cout << "Quotient:\n";
+    cout << "Quotient:\n";
     quotient.print();
 
     return 0;
