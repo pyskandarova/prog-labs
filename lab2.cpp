@@ -1,55 +1,83 @@
 #include <iostream>
+#include <vector>
 
 class Vector {
 private:
-    double x;
-    double y;
-    double z;
+    std::vector<int> elements;
 
 public:
-    Vector(double x, double y, double z) : x(x), y(y), z(z) {}
+    Vector(std::vector<int> values) : elements(values) {}
 
     Vector operator+(const Vector& other) const {
-        return Vector(x + other.x, y + other.y, z + other.z);
+        std::vector<int> result;
+        for (size_t i = 0; i < elements.size(); i++) {
+            result.push_back(elements[i] + other.elements[i]);
+        }
+        return Vector(result);
     }
 
     Vector operator-(const Vector& other) const {
-        return Vector(x - other.x, y - other.y, z - other.z);
+        std::vector<int> result;
+        for (size_t i = 0; i < elements.size(); i++) {
+            result.push_back(elements[i] - other.elements[i]);
+        }
+        return Vector(result);
     }
 
-    Vector operator*(double scalar) const {
-        return Vector(x * scalar, y * scalar, z * scalar);
+    Vector operator*(int scalar) const {
+        std::vector<int> result;
+        for (size_t i = 0; i < elements.size(); i++) {
+            result.push_back(elements[i] * scalar);
+        }
+        return Vector(result);
     }
 
-    Vector operator/(double scalar) const {
-        return Vector(x / scalar, y / scalar, z / scalar);
+    Vector operator/(int scalar) const {
+        std::vector<int> result;
+        for (size_t i = 0; i < elements.size(); i++) {
+            result.push_back(elements[i] / scalar);
+        }
+        return Vector(result);
     }
 
-    void display() const {
-        std::cout << "(" << x << ", " << y << ", " << z << ")" << std::endl;
+    void print() const {
+        std::cout << "[ ";
+        for (const auto& element : elements) {
+            std::cout << element << " ";
+        }
+        std::cout << "]" << std::endl;
     }
 };
 
 int main() {
-    Vector v1(1.0, 2.0, 3.0);
-    Vector v2(4.0, 5.0, 6.0);
+    std::vector<int> values1 = {1, 2, 3};
+    std::vector<int> values2 = {4, 5, 6};
+
+    Vector v1(values1);
+    Vector v2(values2);
 
     Vector sum = v1 + v2;
-    Vector diff = v1 - v2;
-    Vector scalarMul = v1 * 2.0;
-    Vector scalarDiv = v2 / 2.0;
+    Vector difference = v1 - v2;
+    Vector scaled = v1 * 3;
+    Vector divided = v2 / 2;
+
+    std::cout << "v1: ";
+    v1.print();
+
+    std::cout << "v2: ";
+    v2.print();
 
     std::cout << "Sum: ";
-    sum.display();
+    sum.print();
 
     std::cout << "Difference: ";
-    diff.display();
+    difference.print();
 
-    std::cout << "Scalar Multiplication: ";
-    scalarMul.display();
+    std::cout << "Scaled: ";
+    scaled.print();
 
-    std::cout << "Scalar Division: ";
-    scalarDiv.display();
+    std::cout << "Divided: ";
+    divided.print();
 
     return 0;
 }
