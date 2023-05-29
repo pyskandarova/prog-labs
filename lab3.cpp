@@ -1,101 +1,75 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
 class Matrix {
 private:
-    vector<vector<int>> data;
+    int** data;
     int rows;
     int columns;
 
 public:
     Matrix(int rows, int columns) : rows(rows), columns(columns) {
-        data.resize(rows, vector<int>(columns, 0));
+        data = new int*[rows];
+        for (int i = 0; i < rows; ++i) {
+            data[i] = new int[columns];
+        }
     }
 
-    void setData(const vector<vector<int>>& input) {
-        if (input.size() != rows || input[0].size() != columns) {
-            cout << "Invalid input size for matrix\n";
-            return;
+    void setData(int** values) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                data[i][j] = values[i][j];
+            }
         }
-        data = input;
     }
 
     Matrix operator+(const Matrix& other) const {
-        if (rows != other.rows || columns != other.columns) {
-            cout << "Matrix dimensions are not compatible for addition\n";
-            return Matrix(0, 0);
-        }
-
         Matrix result(rows, columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
                 result.data[i][j] = data[i][j] + other.data[i][j];
             }
         }
-
         return result;
     }
 
     Matrix operator-(const Matrix& other) const {
-        if (rows != other.rows || columns != other.columns) {
-            cout << "Matrix dimensions are not compatible for subtraction\n";
-            return Matrix(0, 0);
-        }
-
         Matrix result(rows, columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
                 result.data[i][j] = data[i][j] - other.data[i][j];
             }
         }
-
         return result;
     }
 
     Matrix operator*(const Matrix& other) const {
-        if (columns != other.rows) {
-            cout << "Matrix dimensions are not compatible for multiplication\n";
-            return Matrix(0, 0);
-        }
-
         Matrix result(rows, other.columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < other.columns; j++) {
-                for (int k = 0; k < columns; k++) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < other.columns; ++j) {
+                result.data[i][j] = 0;
+                for (int k = 0; k < columns; ++k) {
                     result.data[i][j] += data[i][k] * other.data[k][j];
                 }
             }
         }
-
         return result;
     }
 
     Matrix operator/(const Matrix& other) const {
-        if (other.rows != other.columns || other.rows != 1) {
-            cout << "Matrix dimensions are not compatible for division\n";
-            return Matrix(0, 0);
-        }
-
-        if (other.data[0][0] == 0) {
-            cout << "Division by zero error\n";
-            return Matrix(0, 0);
-        }
-
         Matrix result(rows, columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                result.data[i][j] = data[i][j] / other.data[0][0];
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                result.data[i][j] = data[i][j] / other.data[i][j];
             }
         }
-
         return result;
     }
 
     void print() const {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
                 cout << data[i][j] << " ";
             }
             cout << "\n";
@@ -104,27 +78,60 @@ public:
 };
 
 int main() {
-    Matrix m1(2, 2);
-    m1.setData({{1, 2}, {3, 4}});
+    const int rows = 2;
+    const int columns = 2;
+    int** values1 = new int*[rows];
+    int** values2 = new int*[rows];
+    for (int i = 0; i < rows; ++i) {
+        values1[i] = new int[columns];
+        values2[i] = new int[columns];
+    }
+    
+    // Вводим элементы первой матрицы
+    cout << "Введите элементы первой матрицы:\n";
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            cin >> values1[i][j];
+        }
+    }
 
-    Matrix m2(2, 2);
-    m2.setData({{5, 6}, {7, 8}});
+    // Вводим элементы второй матрицы
+    cout << "Введите элементы второй матрицы:\n";
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            cin >> values2[i][j];
+        }
+    }
+
+    Matrix m1(rows, columns);
+    m1.setData(values1);
+
+    Matrix m2(rows, columns);
+    m2.setData(values2);
 
     Matrix sum = m1 + m2;
-    cout << "Sum:\n";
+    cout << "Сумма:\n";
     sum.print();
 
     Matrix diff = m1 - m2;
-    cout << "Difference:\n";
+    cout << "Разность:\n";
     diff.print();
 
     Matrix product = m1 * m2;
-    cout << "Product:\n";
+    cout << "Произведение:\n";
     product.print();
 
     Matrix quotient = m1 / m2;
-    cout << "Quotient:\n";
+    cout << "Частное:\n";
     quotient.print();
+
+    // Освобождаем память
+    for (int i = 0; i < rows; ++i) {
+        delete[] values1[i];
+        delete[] values2[i];
+    }
+    delete[] values1;
+    delete[] values2;
 
     return 0;
 }
